@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Account Switcher Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <h1>Google Account Switcher</h1>
+  
+  <div id="settings-container">
+    <section>
+      <h2>Add New Rule</h2>
+      <form id="rule-form">
+        <div class="form-group">
+          <label for="domain">Domain:</label>
+          <input type="text" id="domain" placeholder="mail.google.com" required>
+          <small class="help-text">Enter the domain only (e.g., <code>mail.google.com</code>). Do <strong>not</strong> include <code>https://</code>.</small>
+        </div>
+        <div class="form-group">
+          <label for="account">Account (Email):</label>
+          <input type="email" id="account" placeholder="user@gmail.com" required>
+          <small class="help-text">Enter the full Google account email (e.g., <code>your.name@gmail.com</code>).</small>
+        </div>
+        <button type="submit" id="add-rule">Add Rule</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Current Rules</h2>
+      <table id="rules-table">
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Account</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rules-list">
+          <!-- Rules will be injected here -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

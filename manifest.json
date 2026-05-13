@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Google Account Switcher",
+  "version": "1.0.0",
+  "description": "Automatically switch Google accounts based on the service domain.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "icons": {
+    "128": "icon128.png"
+  }
+}
