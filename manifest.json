@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Google Account Switcher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Automatically switch Google accounts based on the service domain.",
   "permissions": [
     "declarativeNetRequest",
