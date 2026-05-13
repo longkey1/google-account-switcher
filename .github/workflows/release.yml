@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create ZIP
+        run: |
+          zip -r extension.zip . -x "*.git*" ".github*" "README.md" ".gemini*" "Makefile"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: extension.zip
+          name: Release ${{ github.ref_name }}
+          body: |
+            Release of version ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
