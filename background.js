@@ -36,7 +36,11 @@ async function updateAllRules() {
     },
     condition: {
       urlFilter: `||${rule.domain}`,
-      resourceTypes: ['main_frame']
+      resourceTypes: ['main_frame'],
+      // Avoid infinite redirects if authuser is already set correctly
+      excludedQueryParameters: [
+        { key: 'authuser', value: rule.account }
+      ]
     }
   }));
 
