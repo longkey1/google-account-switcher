@@ -18,12 +18,12 @@ jobs:
 
       - name: Create ZIP
         run: |
-          zip -r google-account-switcher.zip . -x "*.git*" ".github*" "README.md" ".gemini*" "Makefile"
+          zip -r google-account-switcher-${{ github.ref_name }}.zip . -x "*.git*" ".github*" "README.md" ".gemini*" "Makefile"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: google-account-switcher.zip
+          files: google-account-switcher-${{ github.ref_name }}.zip
           name: Release ${{ github.ref_name }}
           body: |
             Release of version ${{ github.ref_name }}
