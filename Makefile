@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := help
+
 .PHONY: release
 
 # Get current version from git tag
@@ -60,6 +62,55 @@ release: ## Release target with type argument. Usage: make release type=patch|mi
 	else \
 		echo "Error: Invalid release type. Use 'patch', 'minor', or 'major'"; \
 		exit 1; \
+	fi
+
+.PHONY: re-release
+
+# Variables for re-release target
+dryrun ?= true
+tag ?=
+
+re-release: ## Rerelease target with tag argument. Usage: make re-release tag=<tag> dryrun=false
+	@TAG="$(tag)"; \
+	if [ -z "$$TAG" ]; then \
+		TAG=$$(git describe --tags --abbrev=0 2>/dev/null); \
+	fi; \
+	if [ -z "$$TAG" ]; then \
+		echo "Error: No tag found near HEAD and no tag specified."; \
+		exit 1; \
+	fi; \
+	echo "Target tag: $$TAG"; \
+	if [ "$(dryrun)" = "false" ]; then \
+		echo "Deleting GitHub release..."; \
+		gh release delete "$$TAG" -y || true; \
+		echo "Deleting local tag..."; \
+		git tag -d "$$TAG"; \
+		echo "Deleting remote tag..."; \
+		git push origin ":refs/tags/$$TAG" --no-verify --force; \
+		echo "Recreating tag on HEAD..."; \
+		git tag -a "$$TAG" -m "Release $$TAG"; \
+		echo "Pushing tag to origin..."; \
+		git push origin "$$TAG" --no-verify --force-with-lease; \
+		echo "Recreating GitHub release..."; \
+		gh release create "$$TAG" --title "$$TAG" --notes "Re-release of $$TAG"; \
+		echo "GitHub Actions will build the release binary automatically"; \
+		echo "Done!"; \
+	else \
+		echo "[DRY RUN] Showing what would be done..."; \
+		echo "Would delete release: $$TAG"; \
+		echo "Would delete local tag: $$TAG"; \
+		echo "Would delete remote tag: $$TAG"; \
+		echo "Would create new tag at HEAD: $$TAG"; \
+		echo "Would push tag to origin: $$TAG"; \
+		echo "Would create new release for: $$TAG"; \
+		echo ""; \
+		echo "To execute this re-release, run:"; \
+		if [ -n "$(tag)" ]; then \
+			echo "  make re-release tag=$$TAG dryrun=false"; \
+		else \
+			echo "  make re-release dryrun=false"; \
+		fi; \
+		echo "Dry run complete."; \
 	fi
 
 .PHONY: help
