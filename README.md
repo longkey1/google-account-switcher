@@ -16,7 +16,7 @@ A Chrome extension that automatically switches Google accounts based on the serv
 5. When you navigate to the configured domain, you will be automatically redirected to the specified account.
 
 ## Development & Build
-A GitHub Actions workflow is included to automatically package the extension into a ZIP file whenever you push to the `master` branch. The packaged extension can be found in the "Actions" tab as an Artifact.
+You can test the extension locally by loading the unpacked folder in Chrome.
 
 ## Release
 To create a new release, use the provided `Makefile`:

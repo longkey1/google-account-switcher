@@ -18,31 +18,57 @@ async function updateAllRules() {
   const oldRules = await chrome.declarativeNetRequest.getDynamicRules();
   const oldRuleIds = oldRules.map(rule => rule.id);
 
-  // Generate new rules
-  const newRules = rules.map(rule => ({
-    id: rule.id,
-    priority: 1,
-    action: {
-      type: 'redirect',
-      redirect: {
-        transform: {
-          queryTransform: {
-            addOrReplaceParams: [
-              { key: 'authuser', value: rule.account }
-            ]
+  const newRules = [];
+  
+  rules.forEach(rule => {
+    // 1. Exclusion Rule (Higher Priority): 
+    // Do nothing if "authuser" is already present in the query string (respect existing choice)
+    // or if the URL already contains "/u/" (resolved user path).
+    newRules.push({
+      id: rule.id * 2,
+      priority: 2,
+      action: { type: 'allow' },
+      condition: {
+        urlFilter: `||${rule.domain}`,
+        resourceTypes: ['main_frame'],
+        // Skip redirection if any "authuser" is present or path is resolved
+        queryParameters: [{ key: 'authuser' }],
+      }
+    });
+
+    newRules.push({
+      id: rule.id * 2 + 1,
+      priority: 2,
+      action: { type: 'allow' },
+      condition: {
+        urlFilter: `||${rule.domain}*/u/*`,
+        resourceTypes: ['main_frame']
+      }
+    });
+
+    // 2. Redirect Rule (Lower Priority):
+    // Only add "authuser" if it's completely missing and we're not on a resolved path.
+    newRules.push({
+      id: rule.id * 1000 + rule.id, // Ensure unique ID
+      priority: 1,
+      action: {
+        type: 'redirect',
+        redirect: {
+          transform: {
+            queryTransform: {
+              addOrReplaceParams: [
+                { key: 'authuser', value: rule.account }
+              ]
+            }
           }
         }
+      },
+      condition: {
+        urlFilter: `||${rule.domain}`,
+        resourceTypes: ['main_frame']
       }
-    },
-    condition: {
-      urlFilter: `||${rule.domain}`,
-      resourceTypes: ['main_frame'],
-      // Avoid infinite redirects if authuser is already set correctly
-      excludedQueryParameters: [
-        { key: 'authuser', value: rule.account }
-      ]
-    }
-  }));
+    });
+  });
 
   // Update rules: remove all old ones and add new ones
   await chrome.declarativeNetRequest.updateDynamicRules({
