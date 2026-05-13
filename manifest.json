@@ -14,8 +14,5 @@
   "background": {
     "service_worker": "background.js"
   },
-  "options_page": "options.html",
-  "icons": {
-    "128": "icon128.png"
-  }
+  "options_page": "options.html"
 }

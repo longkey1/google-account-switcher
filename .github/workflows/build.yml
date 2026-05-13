@@ -14,10 +14,10 @@ jobs:
 
       - name: Create ZIP
         run: |
-          zip -r extension.zip . -x "*.git*" ".github*" "README.md" ".gemini*"
+          zip -r google-account-switcher.zip . -x "*.git*" ".github*" "README.md" ".gemini*"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: google-account-switcher
-          path: extension.zip
+          path: google-account-switcher.zip
