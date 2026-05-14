@@ -1,5 +1,9 @@
 # Google Account Switcher
 
+<p align="center">
+  <img src="./icon.png" width="128" alt="Google Account Switcher Logo">
+</p>
+
 A Chrome extension that automatically switches Google accounts based on the service domain (e.g., Gmail, Google Drive) by redirecting with the `authuser` parameter.
 
 ## Features
