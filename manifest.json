@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Google Account Switcher",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo1flTZ/uRfrutRqQAbSiH37HVo4I7nXJq1s70kdJ/JQRr6zErCXMDkEQLvpS1fNTGareJaLXyWkDCCaGdymTMSjbb9PCgc3HKN3laV4BZ6GbvArLdpZ3QrkCC4QRKV4jmxzxe7cu20EkHzsGDWU8fPWZNupKV+Iq7ldJ6Ke8IA82YWaBuyTM/aq/343pvBxOnBSOYPhRP3r+SToG1M/c7lLrRpGjFTOgii1PxR1pxQxywODCDZfhkVxyo6kPMTKLouAd2QmZwjW31AXhWlvL1MA6F/ls01TKcGnItKSfp5j6oZv/42uioYEwM4/XGtNNL3OGoinv+4N4Va8uuVUyHwIDAQAB",
   "description": "Automatically switch Google accounts based on the service domain.",
   "permissions": [
