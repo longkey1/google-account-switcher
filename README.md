@@ -18,20 +18,5 @@ A Chrome extension that automatically switches Google accounts based on the serv
 ## Development & Build
 You can test the extension locally by loading the unpacked folder in Chrome.
 
-## Release
-To create a new release, use the provided `Makefile`:
-
-1.  Run the release command with the desired type (`patch`, `minor`, or `major`):
-    ```bash
-    make release type=patch dryrun=false
-    ```
-2.  This command will:
-    - Automatically bump the version in `manifest.json`.
-    - Commit and push the change to the `master` branch.
-    - Create a git tag (e.g., `v1.0.1`).
-    - Push the tag to GitHub.
-3.  GitHub Actions will then automatically create a GitHub Release and attach the `extension.zip`.
-
-
 ## License
 MIT

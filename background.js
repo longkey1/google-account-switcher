@@ -20,24 +20,26 @@ async function updateAllRules() {
 
   const newRules = [];
   
-  rules.forEach(rule => {
-    // 1. Exclusion Rule (Higher Priority): 
-    // Do nothing if "authuser" is already present in the query string (respect existing choice)
-    // or if the URL already contains "/u/" (resolved user path).
+  rules.forEach((rule, index) => {
+    const baseId = (index + 1) * 10;
+
+    // Rule 1 (Priority 3: Highest): ALLOW
+    // If "authuser" is already in the query string, do nothing.
     newRules.push({
-      id: rule.id * 2,
-      priority: 2,
+      id: baseId + 1,
+      priority: 3,
       action: { type: 'allow' },
       condition: {
-        urlFilter: `||${rule.domain}`,
-        resourceTypes: ['main_frame'],
-        // Skip redirection if any "authuser" is present or path is resolved
-        queryParameters: [{ key: 'authuser' }],
+        urlFilter: `||${rule.domain}*authuser=*`,
+        resourceTypes: ['main_frame']
       }
     });
 
+    // Rule 2 (Priority 2: Medium): ALLOW
+    // If we are already on a resolved user path (/u/...), do nothing.
+    // This is crucial for preventing redirect loops in Drive/Gmail.
     newRules.push({
-      id: rule.id * 2 + 1,
+      id: baseId + 2,
       priority: 2,
       action: { type: 'allow' },
       condition: {
@@ -46,10 +48,11 @@ async function updateAllRules() {
       }
     });
 
-    // 2. Redirect Rule (Lower Priority):
-    // Only add "authuser" if it's completely missing and we're not on a resolved path.
+    // Rule 3 (Priority 1: Lowest): REDIRECT
+    // If Rule 1 and Rule 2 didn't match (meaning no authuser and no /u/ path),
+    // then redirect and add the authuser parameter.
     newRules.push({
-      id: rule.id * 1000 + rule.id, // Ensure unique ID
+      id: baseId + 3,
       priority: 1,
       action: {
         type: 'redirect',
@@ -71,10 +74,13 @@ async function updateAllRules() {
   });
 
   // Update rules: remove all old ones and add new ones
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: oldRuleIds,
-    addRules: newRules
-  });
-
-  console.log('Rules updated:', newRules);
+  try {
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: oldRuleIds,
+      addRules: newRules
+    });
+    console.log('Rules updated successfully:', newRules);
+  } catch (error) {
+    console.error('Failed to update rules:', error);
+  }
 }

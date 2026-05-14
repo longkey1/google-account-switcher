@@ -70,6 +70,39 @@ button {
   background-color: #357ae8;
 }
 
+#presets {
+  margin-bottom: 20px;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#presets p {
+  margin: 8px 0;
+}
+
+#presets strong {
+  display: inline-block;
+  width: 100px;
+  color: #5f6368;
+  font-size: 0.9rem;
+}
+
+.preset-btn {
+  background-color: white;
+  color: #3c4043;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  border: 1px solid #dadce0;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+}
+
+.preset-btn:hover {
+  background-color: #e8eaed;
+  border-color: #d2d4d7;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

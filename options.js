@@ -1,13 +1,24 @@
 const ruleForm = document.getElementById('rule-form');
 const rulesList = document.getElementById('rules-list');
+const domainInput = document.getElementById('domain');
 
 // Load rules on startup
 document.addEventListener('DOMContentLoaded', loadRules);
 
+// Preset buttons
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    domainInput.value = btn.getAttribute('data-domain');
+  });
+});
+
 ruleForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const domain = document.getElementById('domain').value.trim();
+  let domain = document.getElementById('domain').value.trim();
   const account = document.getElementById('account').value.trim();
+
+  // Sanitize domain: remove protocol and trailing slashes
+  domain = domain.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
   if (domain && account) {
     addRule(domain, account);
